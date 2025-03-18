@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { validationSchema } from './config/validations';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BreedsModule } from './breeds/breeds.module';
+import { Breed } from './breeds/entities/breed.entity';
 
 @Module({
   imports: [
@@ -21,11 +23,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         type:'postgres',
         host: configService.get<string>('database.host'),
         port: configService.get<number>('database.port'),
-        name: configService.get<string>('database.name'),
+        database: configService.get<string>('database.name'),
         username: configService.get<string>('database.username'),
-        password: configService.get<string>('database.password')
+        password: configService.get<string>('database.password'),
+        autoLoadEntities:true
+        //entities: [Breed]
       })
-    })
+    }),
+
+    BreedsModule
   ],
   controllers: [],
   providers: [],
