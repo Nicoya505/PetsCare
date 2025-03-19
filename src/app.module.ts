@@ -5,7 +5,6 @@ import configuration from './config/configuration';
 import { validationSchema } from './config/validations';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BreedsModule } from './breeds/breeds.module';
-import { Breed } from './breeds/entities/breed.entity';
 
 @Module({
   imports: [
@@ -13,7 +12,7 @@ import { Breed } from './breeds/entities/breed.entity';
       isGlobal:true,
       load:[configuration],
       validationSchema,
-      envFilePath: `.env.${process.env.NODE_ENV}`
+      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`
     }),
 
     TypeOrmModule.forRootAsync({
@@ -26,8 +25,8 @@ import { Breed } from './breeds/entities/breed.entity';
         database: configService.get<string>('database.name'),
         username: configService.get<string>('database.username'),
         password: configService.get<string>('database.password'),
-        autoLoadEntities:true
-        //entities: [Breed]
+        autoLoadEntities:true,
+        synchronize:false
       })
     }),
 
